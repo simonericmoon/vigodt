@@ -1,0 +1,10 @@
+numpy==1.24.4
+torch==2.2.1
+torchvision==0.17.1
+opencv-python==4.9.0.80
+numpy==1.24.4
+Pillow==10.2.0
+requests==2.31.0
+ultralytics==8.1.28
+flask 
+scipy

@@ -1,0 +1,45 @@
+services:
+  video_processing:
+    build:
+      context: .
+      dockerfile: Dockerfile.video_processing
+    volumes:
+      - data_volume:/usr/src/app/static
+      - "/mnt/z/users/den16813:/data"
+      - processed_videos:/app/output
+      - "./app/output:/app/output"
+    environment:
+      - SERVER_URL=https://sirios-frost-drohnen.k8s.ilt-dmz.iosb.fraunhofer.de/FROST-Server/v1.1/Things
+    ports:
+      - "5001:5001"
+
+  web_server:
+    build:
+      context: .
+      dockerfile: Dockerfile.web_server
+    ports:
+      - "5000:5000"
+    volumes:
+      - data_volume:/usr/src/app/static
+      - processed_videos:/app/output
+      - "./app/output:/app/output"
+    depends_on:
+      - video_processing
+
+  gui:
+    build:
+      context: .
+      dockerfile: Dockerfile.gui
+    ports:
+      - "8501:8501"
+    volumes:
+      - data_volume:/usr/src/app/static
+      - "/mnt/z/users/den16813:/data" 
+      - processed_videos:/app/output
+      - "./app/output:/app/output"
+    #depends_on:
+    #  - video_processing
+
+volumes:
+  data_volume:
+  processed_videos:

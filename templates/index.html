@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detected Objects Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+</head>
+<body>
+    <div id="controls">
+        <label for="objectType">Object Type:</label>
+        <select id="objectType">
+            <option value="all">All Objects</option>
+            <option value="car">Car</option>
+            <option value="person">Person</option>
+            <option value="truck">Truck</option>
+            <option value="container">Container</option>
+            <option value="motorcycle">Motorcycle</option>
+            <option value="bus">Bus</option>
+            <option value="train">Train</option>
+        </select>
+    
+        <br><br>
+    
+        <label for="confidenceRange">Confidence Range:</label>
+        <input type="range" id="confidenceMin" min="0" max="1" value="0" step="0.01">
+        <input type="range" id="confidenceMax" min="0" max="1" value="1" step="0.01">
+        <span id="confidenceLabel">0 - 1</span>
+        
+        <br><br>
+        
+        <label for="frameId">Frame ID:</label>
+        <input type="text" id="frameId">
+    </div>
+    
+    <div id="map"></div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

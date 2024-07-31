@@ -1,0 +1,9 @@
+#map { height: 100vh; }
+#controls {
+    position: absolute; 
+    z-index: 1000; 
+    background: white; 
+    padding: 10px; 
+    top: 10px; 
+    right: 10px;
+}

@@ -1,0 +1,37 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+RUN mkdir -p /app/output
+
+# Install system dependencies for OpenCV and PyTorch
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgl1-mesa-glx \
+        libglib2.0-0 \
+        libsm6 \
+        libxext6 \
+        libxrender-dev \
+        ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only the requirements.txt first to leverage Docker cache
+COPY requirements_video_processing.txt ./
+
+# Install any needed packages specified in requirements_video_processing.txt
+RUN pip install --no-cache-dir -r requirements_video_processing.txt
+
+# Install Flask
+RUN pip install flask
+#RUN pip install filterpy
+
+# Copy the necessary script files
+COPY detectiongeoref_final.py ./
+COPY yolov8n.pt ./
+COPY video_processing_app.py ./
+COPY botsort.yaml ./
+COPY bytetrack.yaml ./
+
+# Command to run the Flask app
+CMD ["python", "video_processing_app.py"]

@@ -1,0 +1,21 @@
+# Dockerfile.gui
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+RUN mkdir -p /app/output
+# Install Python dependencies
+COPY requirements_gui.txt .
+RUN pip install -r requirements_gui.txt
+RUN pip install streamlit-folium folium
+RUN pip install streamlit-authenticator
+
+# Copy the Streamlit app
+COPY streamlit_app.py streamlit_app.py
+COPY config.yaml config.yaml
+
+# Expose the Streamlit port
+EXPOSE 8501
+
+# Command to run the app
+CMD ["streamlit", "run", "streamlit_app.py"]
