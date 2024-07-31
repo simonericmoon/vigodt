@@ -2,7 +2,7 @@
 Script Name: Video Object Detection and Georeferencing
 Description: This script performs object detection on video files and georeferences detected objects using associated SRT files. It supports outputting the results to a JSON file or directly uploading them to a specified server.
 Author: Simon Eric Korfmacher
-Date: 19.07.2024
+Date: 31.07.2024
 Organization: Fraunhofer IOSB (Institute of Optronics, System Technologies and Image Exploitation) SIRIOS
 Version: 1.0
 
@@ -225,7 +225,7 @@ def video_object_detection_and_georeferencing(video_path, model_path, cls_idx=No
 
     tracks = [] # List of active tracks - each track is a dictionary with keys: id, bbox, class, age, confidence
     max_age = 30  # Maximum number of frames to keep a track alive without matching - track will be removed after this age
-    iou_threshold = 0.25  # Minimum IoU to consider a match - used for matching detections with existing tracks
+    iou_threshold = 0.15  # Minimum IoU to consider a match - used for matching detections with existing tracks
 
     while cap.isOpened():
         ret, frame = cap.read()

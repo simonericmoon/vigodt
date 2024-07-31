@@ -310,7 +310,10 @@ if 'video' in st.query_params:
 if 'start' in st.query_params:
     st.session_state.start_time = float(st.query_params['start'])
 if 'end' in st.query_params:
-    st.session_state.end_time = float(st.query_params['end'])
+    end_param = st.query_params['end']
+    st.session_state.end_time = float(end_param) if end_param != 'None' else None
+else:
+    st.session_state.end_time = None
 if 'action' in st.query_params and st.query_params['action'] == 'process':
     st.session_state.processing = True
 
