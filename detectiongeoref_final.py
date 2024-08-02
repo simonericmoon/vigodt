@@ -42,6 +42,8 @@ SERVER_URL = "https://sirios-frost-drohnen.k8s.ilt-dmz.iosb.fraunhofer.de/FROST-
 
 # define maximum pitch value 
 MAX_PITCH = None
+MAX_YAW = None
+MAX_ROLL = None
 
 def find_srt_file(video_path):
     """
@@ -225,7 +227,7 @@ def video_object_detection_and_georeferencing(video_path, model_path, cls_idx=No
 
     tracks = [] # List of active tracks - each track is a dictionary with keys: id, bbox, class, age, confidence
     max_age = 30  # Maximum number of frames to keep a track alive without matching - track will be removed after this age
-    iou_threshold = 0.15  # Minimum IoU to consider a match - used for matching detections with existing tracks
+    iou_threshold = 0.25  # Minimum IoU to consider a match - used for matching detections with existing tracks
 
     while cap.isOpened():
         ret, frame = cap.read()

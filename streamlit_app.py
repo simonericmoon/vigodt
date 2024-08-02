@@ -12,6 +12,20 @@ import io
 import numpy as np
 import base64
 from urllib.parse import urlencode, parse_qs
+import datetime
+
+def calculate_duration(start_time, endtime):
+    return end_time - start_time
+
+def check_duration_limits(start_time, end_time):
+    if end_time is None:
+        return "ok"
+    duration = calculate_duration(start_time, end_time)
+    if duration > 240:
+        return "exceed"
+    if duration > 120:
+        return "warning"
+    return "ok"
 
 st.set_page_config(layout="wide", page_title="VIGODT", page_icon="🌍")
 st.title('Visual Interface for Georeferencing and Object Detection and Tracking - VIGODT')
@@ -471,11 +485,36 @@ with middle_column:
                 key=f"end_time_slider_{st.session_state.selected_video}"
             )
 
+            # Check duration limits
+            duration_status = check_duration_limits(start_time, end_time)
+
+            if duration_status == "warning":
+                st.warning("Warning: Processing a video longer than 2 minutes may take a very long time!")
+            elif duration_status == "exceed":
+                st.error("Error: Cannot process videos longer than 4 minutes. Please select a shorter time range.")
+
+
             # Process video button
-            process_button = st.button('Process Video!', key=f"process_video_button_{st.session_state.selected_video}")
+            process_button = st.button('Process Video!', key=f"process_video_button_{st.session_state.selected_video}", disabled=duration_status=="exceed")
 
             # Check if we should process the video
-            should_process = process_button or (st.session_state.processing and 'action' in st.query_params and st.query_params['action'] == 'process')
+            should_process = process_button and duration_status != "exceed"
+
+            if 'action' in st.query_params and st.query_params['action'] == 'process':
+                # Check URL parameters for duration limits
+                url_start_time = float(st.query_params.get('start', 0))
+                end_param = st.query_params.get('end', str(duration))
+                url_end_time = float(end_param) if end_param != 'None' else duration
+                url_duration_status = check_duration_limits(url_start_time, url_end_time)
+                
+                if url_duration_status == "exceed":
+                    st.error("Error: Cannot process videos longer than 4 minutes. Please adjust the time range in the URL.")
+                    should_process = False
+                elif url_duration_status == "warning":
+                    st.warning("Warning: Processing a video longer than 2 minutes may take a very long time!")
+                    should_process = True
+                else:
+                    should_process = True
 
             if should_process:
                 st.session_state.processing = True
